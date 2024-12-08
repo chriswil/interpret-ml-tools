@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="A survey of current tools and techniques for interpretability related to generative machine learning models">
+  <meta name="keywords" content="Interpretability, Generative, ML">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Survey of Interpretable Generative ML Tools & Techniques</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+  -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!--
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+
+
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            David Bau
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Ref 2
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            Ref 3
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            Ref 4
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+-->
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">A Survey of Interpretable Generative ML Tools & Techniques</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Chris Williams
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Clemson University [CPSC 8810: ML-based Image Synthesis]</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="interpret-ml-tools.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- Code Link.
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              -->
+
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://github.com/chriswil/interpret-ml-tools/data/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+              </span>
+
+            </div>
+
+            <br>
+            <br>
+            <div class="item item-5">
+
+              <h3>Listen to a NotebookLM Summary:</h3>
+              <audio controls>
+
+                <source src="paper.wav" type="audio/wav">
+
+              </audio>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-1">
+          <video poster="" id="1" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/ganalyzer.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-2">
+          <img id="2" src="./static/images/alibi-explain.webp"></img>
+        </div>
+        <div class="item item-3">
+          <video poster="" id="3" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/gan-paint-1.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+        <div class="item item-4">
+          <video poster="" id="4" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/images/alibi-explain.webp"
+                    type="image/webp">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            This final project is an attempt to survey the latest tools and techniques for investigating the interpretability of neural network models,
+            specifically generative models such as Generative Adversarial Networks (GANs), Variational Autoencoders (VAEs) and Diffusion models.
+          </p>
+          <p>
+            Understanding the mechanisms behind generative machine learning is crucial for encouraging trust and acceptance of model outputs, understanding
+            and limiting biases that may exist in particular trained models, and in enabling improved performance, usability, and user interaction.
+          </p>
+          <p>
+            The goal of this project report is to provide a survey of recent tools, techniques, and a case study aimed at capturing and improving the
+            interpretability of a generative machine learning model.
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+
+    <!-- Method Overview -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Method Overview</h2>
+
+        <!-- Interpolating. -->
+
+        <div class="content has-text-justified">
+
+        </div>
+
+        <p>The methodology for this survey focused on reviewing and analyzing recent developments
+          in generative model interpretability. The focus was primarily on GANs (Generative Adversarial Networks), VAEs (Variational Autoencoders), and Diffusion Models,
+          with particular emphasis on generation and manipulation of images.
+        </p><br/>
+
+        <p>Primary sources of data were research papers, with most available via arXiv.org. Focus was primarily
+          on research papers published in the last 3 to 4 years since this is a rapidly evolving field.
+          References to some of the underlying technologies were also consulted, and those have been included
+          in the References section of the final report.
+        </p><br/>
+
+        <p>
+          In addition to the research papers, this survey included reviewing tools and frameworks, primarily open-source projects, that provided interpretability analysis for generative models.
+        </p><br/>
+
+        <p>The tools and techniques were assessed based on (1) <b><i>Support for generative models</i></b>, (2) <b><i>Maturity of product</i></b>,
+          (3) <b><i>Ease of implementation</i></b> and (4) <b><i>Quality of analysis and output</i></b>
+        </p><br/>
+
+
+
+        <p>
+          Several well-designed tools were reviewed initially and not included in the final reviews because they
+          were designed to be used with non-generative models. The tools selected to be reviewed in-depth will be
+          detailed in the Experiments section. The goal of these reviews will be to explore the tools in the
+          context of reviewing the model interpretability while reviewing and potentially improving the performance
+          of the model in question.
+        </p>  </br>
+
+        <br/>
+        <div class="columns is-vcentered interpolation-panel">
+
+          <p>
+            <img  src="./static/images/tools-map.png"></img>
+          </p>
+
+        </div>
+
+        <p>
+          Due to time constraints, research efforts will be focused on experimentation with a
+          Variational Autoencoder (VAE). VAEs are particularly useful in this type of research because they
+          learn meaningful latent representations and enable controlled generation through latent space manipulation,
+          which allows systematic testing by isolating and modifying individual factors. This control helps map the
+          relationship between latent representations and model outputs, making it easier for the interpretability
+          tools being studied.
+        </p></br>
+
+        <br/>
+        <!--/ Interpolating. -->
+
+        <!--
+        <h3 class="title is-4">Re-rendering the input video</h3>
+        <div class="content has-text-justified">
+          <p>
+            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
+            viewpoint such as a stabilized camera by playing back the training deformations.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="75%">
+            <source src="./static/videos/replay.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+ -->
+
+      </div>
+    </div>
+    <!--/ Animation. -->
+
+    <!-- Experimental Results -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Experimental Results</h2>
+
+        <div class="content has-text-justified">
+          <h3>Research findings</h3>
+          <p>
+            After research and testing, our research indicates that Alibi is currently our best choice tool for generative model
+            interpretability analysis, particularly for more mature, production environments. It has a comprehensive and growing
+            feature set, unified API design for ease of use across the available algorithms, and strong community support.
+          </p>
+
+          <p>
+            Our research uncovered advantages for both GUI and API-based approaches. While GUI tools provide immediate feedback
+            and a lower technical barrier to entry, the API-based tools offered customizable analysis as well as more detailed analysis.
+          </p>
+
+          <h3>Use Case: VAE with custom dataset</h3>
+          <p>
+            For the case study to exercise the use of interpretability analysis using the chosen toolset, <a href="https://docs.seldon.io/projects/alibi/en/latest/">Alibi Explain</a>, a dataset was first generated
+            using the Stable Diffusion v2.1 model with code similar to shown below. Two classes were created as part of the maritime-related dataset: boats and lighthouses
+          </p>
+
+          <pre><code>
+from diffusers import StableDiffusionPipeline
+import torch
+import os
+
+# Model ID and loading the pipeline
+#  --generating with a mix of these models
+
+#model_id = "stabilityai/sd-turbo"              # good
+model_id = "stabilityai/stable-diffusion-2-1"   # better
+#model_id = "stabilityai/sd-xl"                 # best, but costs $
+
+pipe = StableDiffusionPipeline.from_pretrained(model_id)
+
+# Check if MPS is available, if so, use it
+if torch.backends.mps.is_available():
+    print("MPS is available, using MPS...")
+    pipe = pipe.to("mps")
+else:
+    print("MPS not available, using CPU...")
+    pipe = pipe.to("cpu")  # Fallback to CPU if MPS isn't available
+
+# Directory to save the generated images
+output_dir = "generated_images/train.orig"
+os.makedirs(output_dir, exist_ok=True)
+
+# Generate images from a text prompt
+prompt = "photo realistic lighthouse"
+for i in range(0,5000):
+    try:
+        result = pipe(prompt)
+        image = result.images[0]
+        image.save(os.path.join(output_dir, f"lighthouse_{i+1}.png"))
+        print(f"Image {i+1} generated and saved successfully.")
+    except Exception as e:
+        print(f"Error during image generation for image {i+1}: {e}")
+          </code></pre>
+
+          <br/><br/><br/>
+
+          The data generation code was used to generate the following dataset:
+
+          <br/><br/>
+          <table class="tg"><thead>
+          <tr>
+            <th class="tg-u287">Train/Test</th>
+            <th class="tg-u287">Class</th>
+            <th class="tg-u287">Number of Images</th>
+          </tr></thead>
+            <tbody>
+            <tr>
+              <td class="tg-0lax">Train</td>
+              <td class="tg-0lax">boat</td>
+              <td class="tg-0lax">5000</td>
+            </tr>
+            <tr>
+              <td class="tg-0lax"></td>
+              <td class="tg-0lax">lighthouse</td>
+              <td class="tg-0lax">5000</td>
+            </tr>
+            <tr>
+              <td class="tg-0lax">Test</td>
+              <td class="tg-0lax">boat</td>
+              <td class="tg-0lax">500</td>
+            </tr>
+            <tr>
+              <td class="tg-0lax"></td>
+              <td class="tg-0lax">lighthouse</td>
+              <td class="tg-0lax">500</td>
+            </tr>
+            </tbody>
+          </table>
+
+          <br/>
+
+
+          <p>
+            A <a href="https://en.wikipedia.org/wiki/Variational_autoencoder">Variational autoencoder (VAE)</a> was constructed for use with the proposed test case.
+            No special features were implemented, in hopes of creating a VAE that was less than optimal. With that less-than-optimal VAE, the plan was to perform
+            analysis of the model and how it reacted with the chosen dataset.
+          </p>
+          <p>
+            The VAE didn't disappoint -- its performance was not great. The output showed promise, as the image reconstructions seemed to be partially accurate, but the results were not great.
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- pictures of reconstruction attempt -->
+    <div class="columns  interpolation-panel" style="justify-content: center;">
+
+      <p>
+        <img  src="./static/images/reconstruction_examples.png"></img>
+      </p>
+
+    </div>
+
+
+    <p>
+      asdfasdf
+    </p>
+
+    <p>
+      asdfsdf
+    </p>
+
+    <!--/ Experimental results -->
+
+
+    <!-- Related links -->
+    <br/><br/><br/>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There's lots of interesting work going on in the area of interpretability for generative models.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2104.09125">Alibi Explain</a> is an open source Python library aimed at machine learning model inspection and interpretation
+          </p>
+
+
+        </div>
+      </div>
+    </div>
+    <!--/ Related links -->
+
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Thanks to <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> for the website template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
