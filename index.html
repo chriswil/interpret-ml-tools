@@ -414,7 +414,7 @@ for i in range(0,5000):
           <p>
             A <a href="https://en.wikipedia.org/wiki/Variational_autoencoder">Variational autoencoder (VAE)</a> was constructed for use with the proposed test case.
             No special features were implemented, in hopes of creating a VAE that was less than optimal. With that less-than-optimal VAE, the plan was to perform
-            analysis of the model and how it reacted with the chosen dataset.
+            analysis of the model and see how it reacted with the chosen dataset.
           </p>
           <p>
             The VAE didn't disappoint -- its performance was not great. The output showed promise, as the image reconstructions seemed to be partially accurate, but the results were not great.
@@ -425,23 +425,52 @@ for i in range(0,5000):
 
     </div>
 
+    </br>
     <!-- pictures of reconstruction attempt -->
     <div class="columns  interpolation-panel" style="justify-content: center;">
-
       <p>
         <img  src="./static/images/reconstruction_examples.png"></img>
       </p>
-
     </div>
 
+    <br/>
 
     <p>
-      asdfasdf
-    </p>
+      The Alibi explainer we used with our use case is the <b><i>AnchorImage</i></b>, which explains what parts of an input image are most crucial
+      for the VAE's reconstruction of the image. The output of the AnchorImage looks similar to a <a href="https://en.wikipedia.org/wiki/Saliency_map">saliency map</a>,
+      but it's not quite the same. Saliency maps show a continuous gradient of importance for every pixel and are usually displayed as a heatmap. They show relative
+      importance across the entire image.
+    </p></br>
+    <p>
+      AnchorImage produces discrete segments of the image and in the case of our scenario, the
+      AnchorImage highlights the regions of the input image that are most critical for accurate reconstruction. It reveals where the most important visual information
+      is stored from the VAE's perspective.
+    </p></br>
 
     <p>
-      asdfsdf
-    </p>
+      The goal with this strategy is to interpret the internals of how the VAE is processing the input images and attempting to reconstruct those images.
+    </p></br>
+
+    </br>
+    <!-- pictures of anchor image analysis -->
+    <div class="columns  interpolation-panel" style="justify-content: center;">
+      <p>
+        <img  src="./static/images/sample_11_combined.png"></img>
+      </p>
+    </div>
+
+    <br/>
+
+    <p>
+      With this AnchorImage analysis output, the reconstruction image in the middle indicates how the VAE attempts to reproduce the image. With an error of 0.0834,
+      the reconstruction is quite blurry and loses much of the detail. The reconstruction difference shows where the reconstruction differs from the original.
+    </p></br>
+
+    <p>
+      This explainer analysis indicates that the VAE is good at preserving basic spatial layout and primary colors, but has difficulty with sharp edges. Strong
+      differences in the rocks at the base of the lighthouse shows that the VAE struggles with the complex rock texture. Variations around the lighthouse edges indicate
+      difficulty with sharp architectural details.
+    </p></br>
 
     <!--/ Experimental results -->
 
@@ -454,13 +483,23 @@ for i in range(0,5000):
 
         <div class="content has-text-justified">
           <p>
-            There's lots of interesting work going on in the area of interpretability for generative models.
+            There's lots of interesting work going on in the area of interpretability for generative models. In addition to the references in the paper,
+            here are some other sites to checkout.
           </p>
           <p>
-            <a href="https://arxiv.org/abs/2104.09125">Alibi Explain</a> is an open source Python library aimed at machine learning model inspection and interpretation
+            <a href="https://arxiv.org/abs/2104.09125">Alibi Explain</a> is the open source Python library aimed at machine learning model inspection and interpretation
+            used for investigating our use case.
           </p>
-
-
+          <p>
+            David Bau's lab at Northeastern for <a href="https://baulab.info/">Interpretable Neural Networks</a> is doing a lot of interesting work related to the
+            structure and interpretation of deep networks.
+          </p>
+          <p>
+            Johannes Schneider wrote and interesting paper on <a href="https://arxiv.org/abs/2404.09554">Explainable Generative AI</a> that's not directly related to
+            interpretability for generative models, but in the same area - a discussion of how explainable AI has gained importance with the growing use of generative AI.
+          </p>
+            Bolei Zhou, one of the authors of the GAN Dissection paper, participated in a <a href="https://www.youtube.com/watch?v=8Hm4ad5QlUE">webinar with Georgia Tech</a>
+           back in 2021 on interpretable latent space.
         </div>
       </div>
     </div>
